@@ -12,12 +12,12 @@ const Home = () => {
 
   useEffect(() => {
     localStorage.setItem("query", "");
+    setImages([]);
     fetchImages();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchImages = async () => {
-    console.log(localStorage.getItem("query"));
     try {
       const response = await Axios.get(
         `/photos/random/?client_id=${
@@ -25,7 +25,6 @@ const Home = () => {
         }&count=8&order_by=latest&query=${localStorage.getItem("query")}`
       );
 
-      console.log(response.data);
       setImages([...images, ...response.data]);
     } catch (err) {
       console.log(err);
@@ -34,8 +33,9 @@ const Home = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setImages([]);
     localStorage.setItem("query", searchText);
+    setImages([]);
+
     fetchImages();
   };
 
