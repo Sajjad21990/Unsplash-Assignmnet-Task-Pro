@@ -34,6 +34,7 @@ export const SubmitBtn = styled.button`
   height: 5vh;
   border-left: none;
   border-radius: 0 5px 5px 0px;
+  cursor: pointer;
 
   @media screen and (max-width: 500px) {
     width: 15vw;
