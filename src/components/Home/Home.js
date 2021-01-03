@@ -13,6 +13,7 @@ const Home = () => {
   useEffect(() => {
     localStorage.setItem("query", "");
     fetchImages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchImages = async () => {
