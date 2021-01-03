@@ -11,21 +11,27 @@ const Home = () => {
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
-    localStorage.setItem("query", "");
     setImages([]);
     fetchImages();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchImages = async () => {
-    try {
-      const response = await Axios.get(
-        `/photos/random/?client_id=${
-          process.env.REACT_APP_ACCESS_KEY
-        }&count=8&order_by=latest&query=${localStorage.getItem("query")}`
-      );
+    let response = [];
 
-      setImages([...images, ...response.data]);
+    try {
+      if (searchText.length > 0) {
+        response = await Axios.get(
+          `/search/photos/?client_id=${process.env.REACT_APP_ACCESS_KEY}&count=8&order_by=latest&query=${searchText}`
+        );
+
+        setImages([...images, ...response.data.results]);
+      } else {
+        response = await Axios.get(
+          `/photos/random/?client_id=${process.env.REACT_APP_ACCESS_KEY}&count=8&order_by=latest`
+        );
+        setImages([...images, ...response.data]);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -33,7 +39,7 @@ const Home = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    localStorage.setItem("query", searchText);
+
     setImages([]);
 
     fetchImages();
@@ -48,6 +54,7 @@ const Home = () => {
         ></Input>
         <SubmitBtn>Search</SubmitBtn>
       </ImageInputForm>
+
       <InfiniteScroll
         dataLength={images.length}
         next={fetchImages}
