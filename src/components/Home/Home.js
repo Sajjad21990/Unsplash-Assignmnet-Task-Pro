@@ -17,21 +17,11 @@ const Home = () => {
   }, []);
 
   const fetchImages = async () => {
-    let response = [];
-
     try {
-      if (searchText.length > 0) {
-        response = await Axios.get(
-          `/search/photos/?client_id=${process.env.REACT_APP_ACCESS_KEY}&count=8&order_by=latest&query=${searchText}`
-        );
-
-        setImages([...images, ...response.data.results]);
-      } else {
-        response = await Axios.get(
-          `/photos/random/?client_id=${process.env.REACT_APP_ACCESS_KEY}&count=8&order_by=latest`
-        );
-        setImages([...images, ...response.data]);
-      }
+      const response = await Axios.get(
+        `/photos/random/?client_id=${process.env.REACT_APP_ACCESS_KEY}&count=5&order_by=latest&query=${searchText}`
+      );
+      setImages([...images, ...response.data]);
     } catch (err) {
       console.log(err);
     }
@@ -39,9 +29,7 @@ const Home = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setImages([]);
-
     fetchImages();
   };
 
